@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Albion Market Bot - Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">🏆</span>
+                    <h1>Albion Market Bot</h1>
+                </div>
+                <div class="header-status">
+                    <span class="status-dot" id="statusDot"></span>
+                    <span id="statusText">Conectando...</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <nav class="nav-tabs">
+            <button class="nav-btn active" data-tab="dashboard">
+                <span>📊</span> Dashboard
+            </button>
+            <button class="nav-btn" data-tab="flips">
+                <span>💰</span> Flips
+            </button>
+            <button class="nav-btn" data-tab="prices">
+                <span>🔍</span> Precios
+            </button>
+            <button class="nav-btn" data-tab="crafting">
+                <span>🔨</span> Crafting
+            </button>
+            <button class="nav-btn" data-tab="refining">
+                <span>⚙️</span> Refinado
+            </button>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard Tab -->
+            <div id="dashboard-tab" class="tab-content active">
+                <div class="stats-grid" id="statsGrid">
+                    <div class="stat-card">
+                        <div class="stat-icon">📦</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="totalItems">-</span>
+                            <span class="stat-label">Items monitoreados</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🏙️</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="totalCities">-</span>
+                            <span class="stat-label">Ciudades</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">💰</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="totalFlips">-</span>
+                            <span class="stat-label">Flips detectados</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🕐</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="lastUpdate">-</span>
+                            <span class="stat-label">Última actualización</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-header">
+                        <h2>🔥 Mejores flips del momento</h2>
+                        <a href="#" class="view-all" data-tab-link="flips">Ver todos →</a>
+                    </div>
+                    <div class="flips-table-container">
+                        <table class="data-table" id="bestFlipsTable">
+                            <thead>
+                                <tr><th>Item</th><th>Comprar</th><th>Vender</th><th>Beneficio</th><th>Margen</th></tr>
+                            </thead>
+                            <tbody id="bestFlipsBody">
+                                <tr><td colspan="5" class="loading">Cargando...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-header">
+                        <h2>🏙️ Ciudades y bonificaciones</h2>
+                    </div>
+                    <div class="cities-grid" id="citiesGrid">
+                        <div class="loading">Cargando...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Flips Tab -->
+            <div id="flips-tab" class="tab-content">
+                <div class="section">
+                    <div class="section-header">
+                        <h2>💰 Todos los flips detectados</h2>
+                        <div class="search-box">
+                            <input type="text" id="flipsSearch" placeholder="Buscar item..." class="search-input">
+                        </div>
+                    </div>
+                    <div class="flips-table-container">
+                        <table class="data-table" id="flipsTable">
+                            <thead>
+                                <tr><th>Item</th><th>Ciudad Compra</th><th>Precio Compra</th><th>Ciudad Venta</th><th>Precio Venta</th><th>Beneficio</th><th>Margen</th></tr>
+                            </thead>
+                            <tbody id="flipsBody">
+                                <tr><td colspan="7" class="loading">Cargando...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Prices Tab -->
+            <div id="prices-tab" class="tab-content">
+                <div class="section">
+                    <div class="section-header">
+                        <h2>🔍 Buscar precios</h2>
+                    </div>
+                    <div class="search-section">
+                        <div class="search-box-large">
+                            <input type="text" id="itemSearch" placeholder="Ej: T4_BAG, T5_CAPE, T6_CLOTH..." class="search-input-large" list="itemSuggestions">
+                            <datalist id="itemSuggestions"></datalist>
+                            <button id="searchBtn" class="btn-primary">Buscar</button>
+                        </div>
+                    </div>
+                    <div id="pricesResult" class="prices-result" style="display: none;">
+                        <h3 id="resultItemTitle"></h3>
+                        <div class="prices-table-container">
+                            <table class="data-table" id="pricesTable">
+                                <thead><tr><th>Ciudad</th><th>Precio Compra</th><th>Precio Venta</th><th>Actualizado</th></tr></thead>
+                                <tbody id="pricesBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Crafting Tab -->
+            <div id="crafting-tab" class="tab-content">
+                <div class="section">
+                    <div class="section-header">
+                        <h2>🔨 Análisis de crafting</h2>
+                    </div>
+                    <div class="search-section">
+                        <div class="search-box-large">
+                            <input type="text" id="craftingSearch" placeholder="Ej: T4_BAG, T5_CAPE..." class="search-input-large">
+                            <button id="craftingBtn" class="btn-primary">Analizar</button>
+                        </div>
+                    </div>
+                    <div id="craftingResult" style="display: none;">
+                        <div id="craftingContent"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Refining Tab -->
+            <div id="refining-tab" class="tab-content">
+                <div class="section">
+                    <div class="section-header">
+                        <h2>⚙️ Análisis de refinado</h2>
+                    </div>
+                    <div class="search-section">
+                        <div class="search-box-large">
+                            <input type="text" id="refiningSearch" placeholder="Ej: T4_CLOTH, T5_METALBAR..." class="search-input-large">
+                            <button id="refiningBtn" class="btn-primary">Analizar</button>
+                        </div>
+                    </div>
+                    <div id="refiningResult" style="display: none;">
+                        <div id="refiningContent"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Datos actualizados cada 3 minutos | Albion Market Bot</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
